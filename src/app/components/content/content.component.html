@@ -1,16 +1,16 @@
 <div class="d-flex justify-content-between pt-3 flex-wrap" *ngIf="arrayDeAlumnos.length > 0">
-    <ul>
-        <li *ngFor="let alumno of arrayDeAlumnos">{{alumno | uppercase}}</li>
+    <ul *ngFor="let alumno of arrayDeAlumnos">
+        <li>{{alumno.nombre | uppercase}}</li>
+        <li>{{alumno.email | uppercase}}</li>
+        <li>{{alumno.comentarios}}</li>
+        <button mat-raised-button color="accent" (click)="eliminarAlumno(alumno.email)">Eliminar</button>
     </ul>
 </div>
 <div class="d-flex justify-content-between pt-3 flex-wrap" [ngClass]="arrayDeAlumnos.length < 0 ? 'success' : 'error'" *ngIf="arrayDeAlumnos.length < 1">
 <p>No hay alumnos</p>
 </div>
-<div [style.background]="arrayDeAlumnos.length > 3 ? 'red' : 'blue'">
-    {{arrayDeAlumnos}}
-</div>
 <div class="d-flex fs-5 mt-5 mb-5 flex-column">
-    <form [formGroup]="formularioEstudiantes" (ngSubmit)="submit()">
+    <form [formGroup]="formularioEstudiantes" (ngSubmit)="submit(formularioEstudiantes)">
         <div class="mt-2 mb-2">
             Nombre: <input type="text" formControlName="nombre">
         </div>
@@ -20,15 +20,10 @@
         <div class="mt-2 mb-2">
             Comentarios: <textarea type="text" formControlName="comentarios"></textarea>
         </div>
-        <button type="submit">Confirmar</button>
+        <button mat-raised-button color="accent" type="submit" [disabled]="formularioEstudiantes.invalid">Confirmar</button>
     </form>
 </div>
 <div *ngIf="formularioEstudiantes.get('nombre')?.errors?.['required']" [style.background]="'red'">El nombre es obligatorio</div>
 <div *ngIf="formularioEstudiantes.get('nombre')?.errors?.['minlength']" [style.background]="'red'">El nombre debe tener al menos 8 caracteres</div>
 <div *ngIf="formularioEstudiantes.get('email')?.errors?.['required']" [style.background]="'red'">El email es obligatorio</div>
 <div *ngIf="formularioEstudiantes.get('email')?.errors?.['email']" [style.background]="'red'">El campo email debe ser un email valido</div>
-
-<h3>Datos enviados:</h3>
-<p>Nombre: {{formularioEstudiantes.get('nombre')?.value}}</p>
-<p>Email: {{formularioEstudiantes.get('email')?.value}}</p>
-<p>Comentarios: {{formularioEstudiantes.get('comentarios')?.value}}</p>
